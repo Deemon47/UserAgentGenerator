@@ -3,6 +3,7 @@
     "description": "Generate random User-Agent http header with parameters",
     "type": "library",
     "version":"1.0.0",
+    "license":"GPL-3.0-only",
     "authors": [
         {
             "name":"phpfail",
@@ -15,7 +16,7 @@
     ],
      "autoload": {
         "psr-0": {
-            "Deemon47\\": "./",
+            "Deemon47\\": "./"
         }
     },
     "minimum-stability": "dev",
