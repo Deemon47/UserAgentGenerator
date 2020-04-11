@@ -2,7 +2,7 @@
     "name": "deemon47/user-agent-generator",
     "description": "Generate random User-Agent http header with parameters",
     "type": "library",
-    "version":"1.0.0",
+    "version":"1.0.1",
     "license":"GPL-3.0-only",
     "authors": [
         {
