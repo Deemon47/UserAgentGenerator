@@ -1,10 +1,14 @@
 <?php
+
+namespace Deemon47;
+
+
 /** **********************************************************************************
  * Generate hundreds of thousands of unique mobile & desktop User Agents that are 100% authentic.
  * Supports Hundreds of Android devices, 32 & 64 bit versions of Windows XP-10.5, Linux 540-686, and Mac 7-10.12
  * as well as browsers Firefox, Chrome, and Internet Explorer.
  */
-class userAgent {
+class UserAgent {
     /**
      * Windows Operating System list with dynamic versioning
      * @var array $windows_os
@@ -143,7 +147,7 @@ class userAgent {
     public $mobile_ios = [ 'iphone' => 'iPhone; CPU iPhone OS :number7-11:_:number0-9:_:number0-9:; like Mac OS X;',
                            'ipad' => 'iPad; CPU iPad OS :number7-11:_:number0-9:_:number0-9: like Mac OS X;',
                            'ipod' => 'iPod; CPU iPod OS :number7-11:_:number0-9:_:number0-9:; like Mac OS X;', ];
-    
+
     /**
      * Get a random operating system
      * @param null|string $os
@@ -158,23 +162,23 @@ class userAgent {
         }
         // randomly select on operating system
         $selected_os = rtrim($_os[random_int(0, count($_os) - 1)], ';');
-        
+
         // check for spin syntax
         if(strpos($selected_os, '[') !== FALSE) {
             $selected_os = self::processSpinSyntax($selected_os);
         }
-        
+
         // check for random number syntax
         if(strpos($selected_os, ':number') !== FALSE) {
             $selected_os = self::processRandomNumbers($selected_os);
         }
-        
+
         if(random_int(1, 100) > 50) {
             $selected_os .= '; en-US';
         }
         return $selected_os;
     }
-    
+
     /**
      * Get Mobile OS
      * @param null|string $os Can specifiy android, iphone, ipad, ipod, or null/blank for random
@@ -208,7 +212,7 @@ class userAgent {
         }
         return $selected_os;
     }
-    
+
     /**
      *  static::processRandomNumbers
      * @param $selected_os
@@ -217,7 +221,7 @@ class userAgent {
     public static function processRandomNumbers($selected_os) {
         return preg_replace_callback('/:number(\d+)-(\d+):/i', function($matches) { return random_int($matches[1], $matches[2]); }, $selected_os);
     }
-    
+
     /**
      *  static::processSpinSyntax
      * @param $selected_os
@@ -229,7 +233,7 @@ class userAgent {
             return $shuffle[array_rand($shuffle)];
         }, $selected_os);
     }
-    
+
     /**
      * processAndroidVersion
      * @param $selected_os
@@ -239,7 +243,7 @@ class userAgent {
         $this->androidVersion = $version = $this->androidVersions[array_rand($this->androidVersions)];
         return preg_replace_callback('/:androidVersion:/i', function($matches) use ($version) { return $version; }, $selected_os);
     }
-    
+
     /**
      * addAndroidDevice
      * @param $selected_os
@@ -248,11 +252,11 @@ class userAgent {
     public function addAndroidDevice($selected_os) {
         $devices = $this->androidDevices[substr($this->androidVersion, 0, 3)];
         $device  = $devices[array_rand($devices)];
-        
+
         $device = self::processSpinSyntax($device);
         return preg_replace_callback('/:androidDevice:/i', function($matches) use ($device) { return $device; }, $selected_os);
     }
-    
+
     /**
      *  static::chromeVersion
      * @param $version
@@ -261,7 +265,7 @@ class userAgent {
     public static function chromeVersion($version) {
         return random_int($version['min'], $version['max']) . '.0.' . random_int(1000, 4000) . '.' . random_int(100, 400);
     }
-    
+
     /**
      *  static::firefoxVersion
      * @param $version
@@ -270,7 +274,7 @@ class userAgent {
     public static function firefoxVersion($version) {
         return random_int($version['min'], $version['max']) . '.' . random_int(0, 9);
     }
-    
+
     /**
      *  static::windows
      * @param $version
@@ -279,7 +283,7 @@ class userAgent {
     public static function windows($version) {
         return random_int($version['min'], $version['max']) . '.' . random_int(0, 9);
     }
-    
+
     /**
      * generate
      * @param null $userAgent
@@ -305,14 +309,14 @@ class userAgent {
             return 'Mozilla/5.0 (' . $this->getOS($userAgent) . ') AppleWebKit/' . (random_int(1, 100) > 50 ? random_int(533, 537) : random_int(600, 603)) . '.' . random_int(1, 50) . ' (KHTML, like Gecko) Chrome/' . self::chromeVersion([ 'min' => 47,
                                                                                                                                                                                                                                               'max' => 55 ]) . ' Safari/' . (random_int(1, 100) > 50 ? random_int(533, 537) : random_int(600, 603));
         } elseif($userAgent == 'firefox') {
-            
+
             return 'Mozilla/5.0 (' . $this->getOS($userAgent) . ') Gecko/' . (random_int(1, 100) > 30 ? '20100101' : '20130401') . ' Firefox/' . self::firefoxVersion([ 'min' => 45,
                                                                                                                                                                         'max' => 74 ]);
         } elseif($userAgent == 'explorer') {
-            
+
             return 'Mozilla / 5.0 (compatible; MSIE ' . ($int = random_int(7, 11)) . '.0; ' . $this->getOS('windows') . ' Trident / ' . ($int == 7 || $int == 8 ? '4' : ($int == 9 ? '5' : ($int == 10 ? '6' : '7'))) . '.0)';
         } elseif($userAgent == 'mobile' || $userAgent == 'android' || $userAgent == 'iphone' || $userAgent == 'ipad' || $userAgent == 'ipod') {
-            
+
             return 'Mozilla/5.0 (' . $this->getMobileOS($userAgent) . ') AppleWebKit/' . (random_int(1, 100) > 50 ? random_int(533, 537) : random_int(600, 603)) . '.' . random_int(1, 50) . ' (KHTML, like Gecko)  Chrome/' . self::chromeVersion([ 'min' => 47,
                                                                                                                                                                                                                                                      'max' => 55 ]) . ' Mobile Safari/' . (random_int(1, 100) > 50 ? random_int(533, 537) : random_int(600, 603)) . '.' . random_int(0, 9);
         } else {
